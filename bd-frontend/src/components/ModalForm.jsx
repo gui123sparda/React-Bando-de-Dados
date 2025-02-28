@@ -1,23 +1,49 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
+export default function ModalForm({ isOpen, onClose, mode, OnSubmit ,usuarioData}) {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [tipo, setTipo] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onClose();
+    const handleTipo = (option) =>{
+        setTipo(option.target.value);
     }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const usuarioData = {nome,email,senha,tipo}
+            await OnSubmit(usuarioData)
+            onClose();
+        } catch (err) {
+            console.error("erro ao criar usuario",err);
+        }
+        
+    }
+
+    useEffect(()=>{
+        if(mode==='edit' && usuarioData){
+            setNome(usuarioData.nome);
+            setEmail(usuarioData.email);
+            setSenha(usuarioData.senha);
+            setTipo(usuarioData.tipo);
+        }else{
+            setNome('');
+            setEmail('');
+            setSenha('');
+            setTipo('');
+        }
+    },[mode,usuarioData]);
 
     return (
         <>
             {/* Open the modal using document.getElementById('ID').showModal() method */}
             <dialog id="my_modal_3" className="modal" open={isOpen}>
                 <div className="modal-box">
+                <h3 className="font-bold text-lg py-4">{mode === 'edit' ? 'Editar Usuario' : 'Adicionar Usuario'}</h3>
                     <form method="dialog" onSubmit={handleSubmit}>
-                        <h3 className="font-bold text-lg py-4">{mode === 'edit' ? 'Editar Usuario' : 'Adicionar Usuario'}</h3>
+                        
 
                         <label className="input my-4 input-bordered flex items-center gap-2">
                             Nome
@@ -31,14 +57,14 @@ export default function ModalForm({ isOpen, onClose, mode, onSubmit }) {
                             Senha
                             <input type="text" className="grow" value={senha} onChange={(e) => setSenha(e.target.value)} />
                         </label>
-                        <select value={tipo} onChange={(e) => setTipo(e.target.value)} className="my-4 select select-bordered w-full max-w-xs">
-                            <option>Candidato</option>
-                            <option>Recrutador</option>
+                        <select  value={tipo} onChange={handleTipo} className="my-4 select select-bordered w-full max-w-xs">
+                            <option >Candidato</option>
+                            <option >Recrutador</option>
 
                         </select>
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>✕</button>
+                        <button type="button" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>✕</button>
                         <div className="gap-2">
-                        <button className="btn btn-success">{mode === 'edit' ? 'Salvar' : 'Adicionar'}</button>
+                        <button type="submit" className="btn btn-success">{mode === 'edit' ? 'Salvar' : 'Adicionar'}</button>
                         </div>
                         
                     </form>

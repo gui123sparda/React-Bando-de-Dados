@@ -6,11 +6,11 @@ export const getUsuarios = async() => {
 }
 
 export const createUsuario = async(usuarioData) => {
-    const{id,nome,email,senha,tipo} = usuarioData;
+    const{nome,email,senha,tipo} = usuarioData;
     
     const{rows} = await query (
-        `insert into usuario values($1,$2,$3,$4,$5) RETURNING *;`,
-        [id,nome,email,senha,tipo]
+        `call adicionar_usuario($1,$2,$3,$4);`,
+        [nome,email,senha,tipo]
     );
     return rows[0];
 }
