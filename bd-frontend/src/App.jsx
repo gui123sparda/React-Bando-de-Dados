@@ -36,7 +36,7 @@ function App() {
       try {
         const response = await axios.post('http://localhost:3000/api/usuarios',newUsuarioData);
         console.log('Usuario Adicionado: ',response.data);
-        setTableData((prevData) => [...prevData,response.data]);
+        //setTableData((prevData) => [...prevData,response.data]);
       } catch (err) {
         console.error('Erro ao adicionar Usuario',err);
       }

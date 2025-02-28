@@ -4,10 +4,16 @@ export default function ModalForm({ isOpen, onClose, mode, OnSubmit ,usuarioData
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [tipo, setTipo] = useState('');
-
-    const handleTipo = (option) =>{
-        setTipo(option.target.value);
+    const options =[
+        {value: '',text:'Cargo'},
+        {value: 'Candidato',text:'Candidato'},
+        {value: 'Recrutador',text:'Recrutador'},
+    ];
+    const [tipo, setTipo] = useState(options[0].value);
+    
+    const handleTipo = e =>{
+        console.log(e.target.value);
+        setTipo(e.target.value);
     }
 
     const handleSubmit = async (e) => {
@@ -58,8 +64,7 @@ export default function ModalForm({ isOpen, onClose, mode, OnSubmit ,usuarioData
                             <input type="text" className="grow" value={senha} onChange={(e) => setSenha(e.target.value)} />
                         </label>
                         <select  value={tipo} onChange={handleTipo} className="my-4 select select-bordered w-full max-w-xs">
-                            <option >Candidato</option>
-                            <option >Recrutador</option>
+                            {options.map(option => ( <option key={option.value} value={option.value}>{option.text}</option>))}
 
                         </select>
                         <button type="button" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>✕</button>
