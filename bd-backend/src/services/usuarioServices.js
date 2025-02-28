@@ -6,11 +6,28 @@ export const getUsuarios = async() => {
 }
 
 export const createUsuario = async(usuarioData) => {
-    const{nome,email,senha,tipo} = usuarioData;
-
+    const{id,nome,email,senha,tipo} = usuarioData;
+    
     const{rows} = await query (
-        `CALL ADICIONAR_USUARIO($1,$2,$3,$4) RETURNING *;`,
-        [nome,email,senha,tipo]
+        `insert into usuario values($1,$2,$3,$4,$5) RETURNING *;`,
+        [id,nome,email,senha,tipo]
     );
     return rows[0];
 }
+
+export const updateUsuario = async(usuarioData,usuarioId) => {
+    const{nome,email,senha,tipo} = usuarioData;
+    
+    const{rows} = await query (
+        `update usuario set nome=$1,email=$2,senha=$3,tipo=$4
+        where id_usuario = $5 RETURNING *`,
+        [nome,email,senha,tipo,usuarioId]
+    );
+    return rows[0];
+}
+
+export const deleteUsuario = async(usuarioId) => {
+    const{rowCount} = await query(`DELETE from usuario where id_usuario = $1`,[usuarioId]);
+    return rowCount>0;
+}
+

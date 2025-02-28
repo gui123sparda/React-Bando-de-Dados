@@ -20,3 +20,34 @@ export const createUsuarios = async (req,res) =>{
         res.status(500).json({message: 'Internal Server Error'});
     }
 };
+
+export const updateUsuarios = async (req,res) =>{
+    try {
+        const usuarioId = req.params.id;
+        const usuarioData = req.body;
+        const updateUsuario = await usuarioService.updateUsuario(usuarioData,usuarioId);
+
+        if(!updateUsuario){
+            return res.status(404).json({message: 'Usuario Nao Encontrado'});
+        }
+        res.status(200).json(updateUsuario);
+    } catch (err) {
+        console.error('Erro ao Cadastrar Usuario:',err);
+        res.status(500).json({message: 'Internal Server Error'});
+    }
+};
+
+export const deleteUsuarios = async (req,res) =>{
+    try {
+        const usuarioId = req.params.id;
+        const deleted=await usuarioService.deleteUsuario(usuarioId);
+        
+        if(!deleted){
+            res.status(404).json({message: `usuario Nao encontrado`});
+        }
+        res.status(200).send();
+    } catch (err) {
+        console.error('Erro ao Deletar Usuario:',err);
+        res.status(500).json({message: 'Internal Server Error'});
+    }
+};
