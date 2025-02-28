@@ -51,3 +51,15 @@ export const deleteUsuarios = async (req,res) =>{
         res.status(500).json({message: 'Internal Server Error'});
     }
 };
+
+export const searchUsuarios = async (req,res) =>{
+    try {
+        const searchTerm = req.query.q;
+        const usuarios=await usuarioService.searchUsuarios(searchTerm);
+        
+        res.status(200).json(usuarios);
+    } catch (err) {
+        console.error('Erro ao Pesquisar Usuario:',err);
+        res.status(500).json({message: 'Internal Server Error'});
+    }
+};

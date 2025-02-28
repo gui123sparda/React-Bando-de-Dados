@@ -1,4 +1,20 @@
+import axios from 'axios';
+import { useState,useEffect } from 'react';
 export default function TableList({handleOpen}) {
+    const [tableData,setTableData] = useState([]);
+    const [error,setError] = useState(null);
+
+    useEffect(()=> {
+        const fetchData = async() =>{
+            try {
+                const response = await axios.get('http://localhost:3000/api/usuarios');
+                setTableData(response.data);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+        fetchData();
+    },[]);
 
     const usuarios = [
         { id: "1", nome: "Guilherme", email: "guilherme@email.com", senha: "gui123", tipo: "Candidato" },
@@ -23,7 +39,7 @@ export default function TableList({handleOpen}) {
                     </thead>
                     <tbody className="hover">
                         {/* row 1 */}
-                        {usuarios.map((usuario) => (
+                        {tableData.map((usuario) => (
                             <tr>
                                 <th>{usuario.id}</th>
                                 <td>{usuario.nome}</td>
@@ -39,35 +55,6 @@ export default function TableList({handleOpen}) {
                             </tr>
 
                         ))}
-
-
-
-                        {/* row 2 */}
-                        <tr >
-                            <th>2</th>
-                            <td>Hart Hagerty</td>
-                            <td>Desktop Support Technician</td>
-                            <td>Purple</td>
-                        </tr>
-                        {/* row 3 */}
-                        <tr>
-                            <th>3</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
-                        <tr>
-                            <th>4</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
-                        <tr>
-                            <th>5</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

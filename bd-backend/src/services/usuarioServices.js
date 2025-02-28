@@ -31,3 +31,8 @@ export const deleteUsuario = async(usuarioId) => {
     return rowCount>0;
 }
 
+export const searchUsuarios = async(searchTerm) => {
+    const{rows} = await query(`select * from usuario where nome LIKE $1 or email LIKE $1`,[`%${searchTerm}%`]);
+    return rows;
+}
+
